@@ -6,8 +6,8 @@
 
 use common\widgets\Alert;
 use frontend\assets\AppAsset;
-use yii\bootstrap\Nav;
-use yii\bootstrap\NavBar;
+use yii\bootstrap4\Nav;
+use yii\bootstrap4\NavBar;
 use yii\helpers\Html;
 use yii\widgets\Breadcrumbs;
 
@@ -38,7 +38,7 @@ $this->beginBody() ?>
             'brandLabel' => Yii::$app->name,
             'brandUrl'   => Yii::$app->homeUrl,
             'options'    => [
-                'class' => 'navbar-inverse navbar-fixed-top',
+//                'class' => 'navbar-inverse navbar-fixed-top',
             ],
         ]
     );
@@ -62,7 +62,9 @@ $this->beginBody() ?>
     }
     echo Nav::widget(
         [
-            'options' => ['class' => 'navbar-nav navbar-right'],
+            'options' => [
+                'class' => 'navbar-nav justify-content-end align-items-center',
+            ],
             'items'   => $menuItems,
         ]
     );
