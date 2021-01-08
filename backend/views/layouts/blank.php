@@ -4,10 +4,10 @@
 
 /* @var $content string */
 
-use backend\assets\AppAsset;
+use backend\assets\AppadminAsset;
 use yii\helpers\Html;
 
-AppAsset::register($this);
+AppadminAsset::register($this);
 ?>
 <?php
 $this->beginPage() ?>
@@ -23,14 +23,17 @@ $this->beginPage() ?>
     <?php
     $this->head() ?>
 </head>
-<body class="blank">
+<body class="bg-gradient-primary">
 <?php
 $this->beginBody() ?>
 
 <div class="container">
 
-    <div class="wrap">
+    <!-- Outer Row -->
+    <div class="row justify-content-center">
+
         <?= $content ?>
+
     </div>
 
 </div>

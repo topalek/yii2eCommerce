@@ -2,33 +2,63 @@
 
 /* @var $this yii\web\View */
 
-/* @var $form yii\bootstrap\ActiveForm */
+/* @var $form yii\bootstrap4\ActiveForm */
 
 /* @var $model \common\models\LoginForm */
 
-use yii\bootstrap\ActiveForm;
+use yii\bootstrap4\ActiveForm;
 use yii\helpers\Html;
+use yii\helpers\Url;
 
 $this->title = 'Login';
 ?>
-<div class="site-login">
-    <h1><?= Html::encode($this->title) ?></h1>
+<div class="col-xl-10 col-lg-12 col-md-9">
+    <div class="card o-hidden border-0 shadow-lg my-5">
+        <div class="card-body p-0">
+            <!-- Nested Row within Card Body -->
+            <div class="row">
+                <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
+                <div class="col-lg-6">
+                    <div class="p-5">
+                        <div class="text-center">
+                            <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
+                        </div>
+                        <?php
+                        $form = ActiveForm::begin(['id' => 'login-form', 'options' => ['class' => 'user']]); ?>
 
-    <p>Please fill out the following fields to login:</p>
+                        <?= $form->field($model, 'username')->textInput(
+                            ['autofocus'   => true,
+                             'class'       => 'form-control form-control-user',
+                             'placeholder' => 'Enter your username',
+                            ]
+                        ) ?>
 
-    <?php
-    $form = ActiveForm::begin(['id' => 'login-form']); ?>
+                        <?= $form->field($model, 'password')->passwordInput(
+                            ['class' => 'form-control form-control-user', 'placeholder' => 'Password']
+                        ) ?>
 
-    <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
+                        <?= $form->field($model, 'rememberMe')->checkbox(
+                            ['class' => "custom-control-input"]
+                        ) ?>
 
-    <?= $form->field($model, 'password')->passwordInput() ?>
+                        <?= Html::submitButton(
+                            'Login',
+                            [
+                                'class' => 'btn btn-primary btn-block btn-user',
+                                'name'  => 'login-button',
+                            ]
+                        ) ?>
 
-    <?= $form->field($model, 'rememberMe')->checkbox() ?>
-
-    <div class="form-group">
-        <?= Html::submitButton('Login', ['class' => 'btn btn-primary btn-block', 'name' => 'login-button']) ?>
+                        <?php
+                        ActiveForm::end(); ?>
+                        <hr>
+                        <div class="text-center">
+                            <a class="small" href="<?= Url::to(['/site/forgot-password']) ?>">Forgot Password?</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <?php
-    ActiveForm::end(); ?>
 </div>
+

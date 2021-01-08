@@ -23,7 +23,7 @@ class SiteController extends Controller
                 'class' => AccessControl::class,
                 'rules' => [
                     [
-                        'actions' => ['login', 'error'],
+                        'actions' => ['login', 'error', 'forgot-password'],
                         'allow'   => true,
                     ],
                     [
@@ -102,5 +102,10 @@ class SiteController extends Controller
         Yii::$app->user->logout();
 
         return $this->goHome();
+    }
+
+    public function actionForgotPassword()
+    {
+        return "forgot password";
     }
 }
