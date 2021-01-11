@@ -39,7 +39,7 @@ $this->beginBody() ?>
 
         <?= Alert::widget() ?>
         <!-- Main Content -->
-        <div id="content">
+        <div id="content" class="p-4">
             <?= $content ?>
         </div>
         <!-- End of Main Content -->

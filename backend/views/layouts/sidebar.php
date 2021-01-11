@@ -6,6 +6,7 @@
  */
 
 use yii\bootstrap4\Nav;
+use yii\helpers\Url;
 
 ?>
 <!-- Sidebar -->
@@ -37,18 +38,8 @@ use yii\bootstrap4\Nav;
         [
             'items' => [
                 [
-                    'url'   => '/product/index',
-                    'label' => 'Products',
-                    'items' => [
-                        [
-                            'url'   => '/product/index',
-                            'label' => 'Create',
-                        ],
-                        [
-                            'url'   => '/product/index',
-                            'label' => 'Update',
-                        ],
-                    ],
+                    'url'   => Url::to(['/product/index']),
+                    'label' => 'Product',
                 ],
                 [
                     'url'   => '/category/index',
