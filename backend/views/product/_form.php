@@ -1,5 +1,6 @@
 <?php
 
+use dosamigos\ckeditor\CKEditor;
 use yii\bootstrap4\ActiveForm;
 use yii\helpers\Html;
 
@@ -15,11 +16,28 @@ use yii\helpers\Html;
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
+    <?= $form->field($model, 'description')->widget(
+        CKEditor::class,
+        [
+            'options' => ['rows' => 6],
+            'preset'  => 'basic',
+        ]
+    ) ?>
 
-    <?= $form->field($model, 'image')->fileInput() ?>
+    <?= $form->field(
+        $model,
+        'image',
+        [
+            'template'     => '
+                  <div class="custom-file">
+                    {input}{label}{error}
+                  </div>
+                ',
+            'labelOptions' => ['class' => 'custom-file-label'],
+        ]
+    )->fileInput(['class' => 'custom-file-input']) ?>
 
-    <?= $form->field($model, 'price')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'price')->textInput(['maxlength' => true, 'type' => 'number']) ?>
 
     <?= $form->field($model, 'status')->checkbox() ?>
 
