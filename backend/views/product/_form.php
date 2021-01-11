@@ -12,7 +12,7 @@ use yii\helpers\Html;
 <div class="product-form">
 
     <?php
-    $form = ActiveForm::begin(); ?>
+    $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
@@ -26,7 +26,7 @@ use yii\helpers\Html;
 
     <?= $form->field(
         $model,
-        'image',
+        'imageFile',
         [
             'template'     => '
                   <div class="custom-file">
