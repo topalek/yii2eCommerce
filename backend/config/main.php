@@ -12,6 +12,7 @@ return [
     'basePath'            => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
     'bootstrap'           => ['log'],
+    'language'            => 'ru_RU',
     'modules'             => [],
     'components'          => [
         'request'      => [
@@ -26,6 +27,13 @@ return [
                 'httpOnly' => true,
                 'domain'   => $params['cookieDomain'],
             ],
+        ],
+        'formatter'    => [
+            'dateFormat'        => 'dd.MM.yyyy',
+            'datetimeFormat'    => 'php:d.m.Y H:i',
+            'decimalSeparator'  => ',',
+            'thousandSeparator' => ' ',
+            'currencyCode'      => 'UAH',
         ],
         'session'      => [
             'name'         => $params['cookieDomain'] . '_session',
