@@ -150,13 +150,13 @@ class Product extends \yii\db\ActiveRecord
         $transaction = Yii::$app->db->beginTransaction();
         $ok = parent::save($runValidation, $attributeNames);
 
-        if ($ok) {
+        if ($ok && $this->imageFile) {
             if (!$this->saveImg()) {
                 $transaction->rollBack();
                 return false;
             }
-            $transaction->commit();
         }
+        $transaction->commit();
         return $ok;
     }
 
