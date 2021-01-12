@@ -184,9 +184,18 @@ class Product extends \yii\db\ActiveRecord
         );
     }
 
+    /**
+     * @return string
+     */
     public function getImgUrl()
     {
-        return Yii::$app->params['frontendUrl'] . '/storage' . $this->image;
+        $url = Yii::$app->params['frontendUrl'];
+        if (!$this->image) {
+            $url .= '/img/no-photo.png';
+        } else {
+            $url .= '/storage' . $this->image;
+        }
+        return $url;
     }
 
 
