@@ -2,10 +2,13 @@
 
 namespace common\models;
 
+use Exception;
 use Yii;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
+use yii\helpers\ArrayHelper;
 use yii\helpers\FileHelper;
+use yii\helpers\Html;
 use yii\web\UploadedFile;
 
 /**
@@ -33,6 +36,9 @@ class Product extends \yii\db\ActiveRecord
      * @var UploadedFile
      */
     public $imageFile;
+
+    const STATUS_PUBLISHED = 1;
+    const STATUS_DRAFT = 0;
 
     /**
      * {@inheritdoc}
@@ -93,7 +99,9 @@ class Product extends \yii\db\ActiveRecord
             'image'       => 'Product Image',
             'imageFile'   => 'Product Image',
             'price'       => 'Price',
-            'status'      => 'Published',
+            'status'      => 'Status',
+            'statusName'  => 'Status',
+            'statusBadge' => 'Status',
             'created_at'  => 'Created At',
             'updated_at'  => 'Updated At',
             'created_by'  => 'Created By',
@@ -198,5 +206,43 @@ class Product extends \yii\db\ActiveRecord
         return $url;
     }
 
+    /**
+     * @return string
+     */
+    public function getImgPreview()
+    {
+        return Html::img($this->getImgUrl(), ['style' => 'width:50px']);
+    }
 
+    /**
+     * @return string[]
+     */
+    public static function getStatusList()
+    {
+        return [
+            self::STATUS_PUBLISHED => 'Active',
+            self::STATUS_DRAFT     => 'Draft',
+        ];
+    }
+
+    /**
+     * @return string
+     * @throws Exception
+     */
+    public function getStatusName()
+    {
+        return ArrayHelper::getValue(self::getStatusList(), $this->status);
+    }
+
+    /**
+     * @return string
+     */
+    public function getStatusBadge()
+    {
+        return Html::tag(
+            'span',
+            $this->status ? 'Active' : 'Draft',
+            ['class' => $this->status ? 'badge badge-success' : 'badge badge-danger']
+        );
+    }
 }

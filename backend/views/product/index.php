@@ -27,26 +27,9 @@ $this->params['breadcrumbs'][] = $this->title;
             'filterModel'  => $searchModel,
             'columns'      => [
                 'id',
-                [
-                    'attribute' => 'image',
-                    'value'     => function ($model) {
-                        return Html::img($model->getImgUrl(), ['style' => 'width:50px']);
-                    },
-                    'format'    => 'raw',
-                ],
+                'imgPreview:html',
                 'name',
-//                'imgUrl:image',
-                [
-                    'attribute' => 'status',
-                    'value'     => function ($model) {
-                        return Html::tag(
-                            'span',
-                            $model->status ? 'Active' : 'Draft',
-                            ['class' => $model->status ? 'badge badge-success' : 'badge badge-danger']
-                        );
-                    },
-                    'format'    => 'raw',
-                ],
+                'statusBadge:html',
                 'price:currency',
                 'created_at:datetime',
                 'updated_at:datetime',
