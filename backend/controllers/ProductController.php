@@ -94,10 +94,11 @@ class ProductController extends Controller
     public function actionCreate()
     {
         $model = new Product();
-        $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
-//        dd($model->imageFile);
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+            if ($model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         }
 
         return $this->render(
