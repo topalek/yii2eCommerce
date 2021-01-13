@@ -11,6 +11,8 @@ use yii\base\Model;
  */
 class SignupForm extends Model
 {
+    public $firstname;
+    public $lastname;
     public $username;
     public $email;
     public $password;
@@ -23,6 +25,10 @@ class SignupForm extends Model
     {
         return [
             ['username', 'trim'],
+            ['firstname', 'required'],
+            ['firstname', 'string', 'min' => 2, 'max' => 255],
+            ['lastname', 'required'],
+            ['lastname', 'string', 'min' => 2, 'max' => 255],
             ['username', 'required'],
             [
                 'username',

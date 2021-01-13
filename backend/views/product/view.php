@@ -28,6 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
             ]
         ) ?>
+        <?= Html::a('Create new', ['create'], ['class' => 'btn btn-secondary']) ?>
     </p>
 
     <?= DetailView::widget(

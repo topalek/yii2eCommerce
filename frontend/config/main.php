@@ -9,6 +9,7 @@ $params = array_merge(
 
 return [
     'id'                  => 'app-frontend',
+    'name'                => 'Yii2 e-commerce',
     'basePath'            => dirname(__DIR__),
     'bootstrap'           => ['log'],
     'language'            => 'ru_RU',
