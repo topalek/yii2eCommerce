@@ -137,7 +137,14 @@ $this->beginBody() ?>
     </div>
 </section>
 <!-- Breadcrumb Section End -->
-<?= Alert::widget() ?>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <?= Alert::widget() ?>
+        </div>
+    </div>
+</div>
+
 <?= $content ?>
 
 <!-- Footer Section Begin -->

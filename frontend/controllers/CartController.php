@@ -22,4 +22,9 @@ class CartController extends Controller
         }
         return ['status' => false, 'msg' => 'Only POST method is allowed'];
     }
+
+    public function actionIndex()
+    {
+        return $this->render('index');
+    }
 }
