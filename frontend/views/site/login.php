@@ -9,7 +9,7 @@
 use yii\bootstrap4\ActiveForm;
 use yii\helpers\Html;
 
-$this->title = 'Sign in';
+$this->title = 'Login';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <section class="site-login spad">
