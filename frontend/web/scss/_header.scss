@@ -23,8 +23,17 @@
 }
 
 .header__top__links {
-  display: inline-block;
+  display: inline-flex;
   margin-right: 25px;
+  align-items: center;
+
+  .dropdown-menu {
+    background-color: $heading-color;
+
+    .dropdown-item {
+      padding: 0.5rem 1rem;
+    }
+  }
 
   a {
     color: $white-color;
@@ -33,6 +42,7 @@
     letter-spacing: 2px;
     margin-right: 28px;
     display: inline-block;
+    padding: 0;
 
     &:last-child {
       margin-right: 0;
