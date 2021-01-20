@@ -11,26 +11,30 @@ use yii\web\IdentityInterface;
 /**
  * User model
  *
- * @property integer $id
- * @property string  $firstname
- * @property string  $lastname
- * @property string  $username
- * @property string  $password_hash
- * @property string  $password_reset_token
- * @property string  $verification_token
- * @property string  $email
- * @property string  $auth_key
- * @property integer $status
- * @property integer $created_at
- * @property integer $updated_at
- * @property string  $password write-only password
+ * @property integer       $id
+ * @property string        $firstname
+ * @property string        $lastname
+ * @property string        $username
+ * @property string        $password_hash
+ * @property string        $password_reset_token
+ * @property string        $verification_token
+ * @property string        $email
+ * @property string        $auth_key
+ * @property integer       $status
+ * @property integer       $created_at
+ * @property integer       $updated_at
+ * @property string        $password write-only password
+ *
+ * @property UserAddress[] $addresses
+ * @property UserAddress   $address
  */
 class User extends ActiveRecord implements IdentityInterface
 {
     const STATUS_DELETED = 0;
     const STATUS_INACTIVE = 9;
     const STATUS_ACTIVE = 10;
-
+    public $password;
+    public $passwordConfirm;
 
     /**
      * {@inheritdoc}
@@ -227,5 +231,27 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $fullName = trim($this->firstname . ' ' . $this->lastname);
         return $fullName ?: $this->username;
+    }
+
+    /**
+     * Gets query for [[UserAddress]].
+     *
+     * @return \yii\db\ActiveQuery|\common\models\query\UserAddressQuery
+     */
+    public function getAddresses()
+    {
+        return $this->hasMany(UserAddress::class, ['user_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[UserAddress]].
+     *
+     * @return \common\models\UserAddress
+     */
+    public function getAddress(): UserAddress
+    {
+        $address = $this->addresses[0] ?? new UserAddress();
+        $address->user_id = $this->id;
+        return $address;
     }
 }
