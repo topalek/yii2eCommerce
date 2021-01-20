@@ -51,6 +51,10 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName'  => false,
             'rules'           => [
+                'profile'       => 'profile/index',
+                '<action>'      => 'site/<action>',
+                //                'site/<action>/<year:\d{4}>/<category>' => 'post/index',
+                'post/<id:\d+>' => 'post/view',
             ],
         ],
     ],
