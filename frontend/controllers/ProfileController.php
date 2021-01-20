@@ -12,6 +12,7 @@ use common\models\User;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
+use yii\web\ForbiddenHttpException;
 
 class ProfileController extends Controller
 {
@@ -66,6 +67,9 @@ class ProfileController extends Controller
      */
     public function actionUpdateAddress()
     {
+        if (!Yii::$app->request->isAjax) {
+            throw new ForbiddenHttpException('You are allowed to make only ajax request');
+        }
         /** @var User $user */
         $user = Yii::$app->user->getIdentity();
         $address = $user->address;
