@@ -144,8 +144,13 @@ $this->beginBody() ?>
         </div>
     </div>
 </div>
-
-<?= $content ?>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <?= $content ?>
+        </div>
+    </div>
+</div>
 
 <!-- Footer Section Begin -->
 <footer class="footer">
