@@ -26,15 +26,15 @@ use yii\web\View;
                 'items'   => [
                     [
                         'label' => 'Profile',
-                        'url'   => ['/user/profile'],
+                        'url'   => ['/profile/index'],
                     ],
                     [
                         'label' => 'Address',
-                        'url'   => ['/user/address'],
+                        'url'   => ['/profile/address'],
                     ],
                     [
                         'label' => 'Orders',
-                        'url'   => ['/user/orders'],
+                        'url'   => ['/profile/orders'],
                     ],
                 ],
                 'options' => [

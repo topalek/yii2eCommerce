@@ -76,7 +76,7 @@ $this->beginBody() ?>
 <div class="container">
     <div class="row pt-3">
         <div class="col-lg-3">
-            <?= $this->render('../user/_sidebar') ?>
+            <?= $this->render('../profile/_sidebar') ?>
         </div>
         <div class="col-lg-9">
             <?= $content ?>

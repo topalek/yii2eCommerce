@@ -33,7 +33,7 @@ $form = ActiveForm::begin(
         'options' => [
             'data-pjax' => 1,
         ],
-        'action'  => '/address/update-address',
+        'action'  => 'update-address',
     ]
 ); ?>
 <?= $form->field($address, 'address')->textInput() ?>

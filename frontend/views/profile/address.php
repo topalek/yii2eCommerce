@@ -21,7 +21,7 @@ use yii\widgets\Pjax;
         <div class="card-body">
             <?php
             Pjax::begin(['enablePushState' => false]); ?>
-            <?= $this->render('../address/address_form', ['address' => $address]) ?>
+            <?= $this->render('address_form', ['address' => $address]) ?>
             <?php
             Pjax::end() ?>
         </div>
