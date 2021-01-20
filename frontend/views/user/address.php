@@ -12,13 +12,18 @@
 use common\models\User;
 use common\models\UserAddress;
 use yii\web\View;
+use yii\widgets\Pjax;
 
 ?>
 <div class="col">
     <div class="card">
         <h5 class="card-header">Address info</h5>
         <div class="card-body">
+            <?php
+            Pjax::begin(['enablePushState' => false]); ?>
             <?= $this->render('../address/address_form', ['address' => $address]) ?>
+            <?php
+            Pjax::end() ?>
         </div>
     </div>
 </div>

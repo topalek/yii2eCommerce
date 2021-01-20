@@ -10,7 +10,6 @@ use yii\bootstrap4\ActiveForm;
 use yii\bootstrap4\Alert;
 use yii\helpers\Html;
 use yii\web\View;
-use yii\widgets\Pjax;
 
 /**
  * @var $address UserAddress
@@ -18,8 +17,7 @@ use yii\widgets\Pjax;
  */
 
 ?>
-<?php
-Pjax::begin(['enablePushState' => false]); ?>
+
 
 <?php
 if (isset($success) && $success): ?>
@@ -31,11 +29,11 @@ endif; ?>
 <?php
 $form = ActiveForm::begin(
     [
-        'id' => 'form-address',
+        'id'      => 'form-address',
         'options' => [
             'data-pjax' => 1,
         ],
-        'action' => '/address/update-address',
+        'action'  => '/address/update-address',
     ]
 ); ?>
 <?= $form->field($address, 'address')->textInput() ?>
@@ -48,4 +46,4 @@ $form = ActiveForm::begin(
 </div>
 <?php
 ActiveForm::end();
-Pjax::end() ?>
+?>
