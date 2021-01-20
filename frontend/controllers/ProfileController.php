@@ -41,7 +41,9 @@ class ProfileController extends Controller
     {
         /** @var User $user */
         $user = Yii::$app->user->getIdentity();
-
+        if ($user->load(Yii::$app->request->post()) && $user->save()) {
+            Yii::$app->session->setFlash('success', 'Profile information was successfully updated');
+        }
         return $this->render(
             'profile',
             [
