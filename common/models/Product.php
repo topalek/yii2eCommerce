@@ -245,4 +245,20 @@ class Product extends \yii\db\ActiveRecord
             ['class' => $this->status ? 'badge badge-success' : 'badge badge-danger']
         );
     }
+
+    /**
+     * @return bool|string
+     */
+    public static function getUploadsPath()
+    {
+        return Yii::getAlias('@uploads');
+    }
+
+    /**
+     * @return bool|string
+     */
+    public static function getUploadsUrl()
+    {
+        return Yii::$app->params['frontendUrl'] . '/storage';
+    }
 }
