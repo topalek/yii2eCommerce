@@ -16,6 +16,12 @@
     color: $white-color;
     margin-bottom: 0;
   }
+
+  .logo-link {
+    img {
+      filter: drop-shadow(0px 3px 5px white);
+    }
+  }
 }
 
 .header__top__right {

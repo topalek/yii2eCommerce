@@ -310,6 +310,10 @@ ol {
   margin-bottom: 0;
 }
 
+.header__top__left .logo-link img {
+  filter: drop-shadow(0px 3px 5px white);
+}
+
 .header__top__right {
   text-align: right;
 }
