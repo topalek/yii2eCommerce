@@ -7,31 +7,64 @@
  * @var $this View
  */
 
+use common\models\Product;
+use yii\helpers\Html;
 use yii\web\View;
 
+/**@var $items array */
+$this->title = 'Cart';
+$this->params['breadcrumbs'][] = $this->title;
 ?>
-<?php
-$this->registerJsFile('https://cdn.jsdelivr.net/npm/lozad/dist/lozad.min.js') ?>
-<div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <iframe width="560" height="315" class="embed-video lazy-load"
-                    data-src="https://www.youtube.com/embed/QRU_5SaZyJE" src="/img/no-photo.png" frameborder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen></iframe>
+<div class="cart-index">
+    <div class="card">
+        <div class="card-header">
+            <h3>Cart items</h3>
+        </div>
+        <div class="card-body">
+            <div class="grid col6 row-a">
+                <div class="cart-title">Product</div>
+                <div class="cart-title">Image</div>
+                <div class="cart-title">Price</div>
+                <div class="cart-title">QTY</div>
+                <div class="cart-title">Total price</div>
+                <div class="cart-title">Actions</div>
+                <?php
+
+                foreach ($items as $item) :?>
+                    <div class="cart-item"><?= $item['name'] ?></div>
+                    <div class="cart-item"><?= Html::img(
+                            Product::getUploadsUrl() . $item['image'],
+                            ['class' => 'img-fluid']
+                        ) ?>
+                    </div>
+                    <div class="cart-item"><?= $item['price'] ?></div>
+                    <div class="cart-item"><?= $item['quantity'] ?></div>
+                    <div class="cart-item"><?= $item['total_price'] ?></div>
+                    <div class="cart-item"><?= Html::a(
+                            '<i class="fa fa-trash-o"></i>',
+                            ['cart/delete', 'id' => $item['id']],
+                            ['class' => 'btn btn-outline-danger btn-sm']
+                        ) ?></div>
+                <?php
+                endforeach; ?>
+            </div>
         </div>
     </div>
+
 </div>
-<?php
-$this->registerJs(
-    <<<JS
-const observer = lozad('.lazy-load'); // lazy loads elements with default selector as '.lozad'
 
-setTimeout(()=>{
-    observer.observe();
-},2000)
+<style>
+    .grid {
+        display: grid;
+        grid-gap: 10px;
+        align-items: center;
+    }
 
-JS
+    .grid.col6 {
+        grid-template-columns: repeat(6, 1fr);
+    }
 
-) ?>
-
+    .grid.row-a {
+        grid-template-rows: auto;
+    }
+</style>

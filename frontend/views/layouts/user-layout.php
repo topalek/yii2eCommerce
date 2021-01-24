@@ -24,7 +24,7 @@ $this->beginPage() ?>
     <?php
     $this->head() ?>
 </head>
-<body>
+<body class="user-layout">
 <?php
 $this->beginBody() ?>
 
@@ -54,6 +54,11 @@ $this->beginBody() ?>
     <div class="header__top">
         <div class="container">
             <div class="row">
+                <div class="col">
+                    <div class="header__top__left">
+                        <?= Html::a(Html::img("/img/logo.png"), ['/'], ['class' => 'logo-link']) ?>
+                    </div>
+                </div>
                 <div class="col">
                     <div class="header__top__right">
                         <div class="header__top__links">
