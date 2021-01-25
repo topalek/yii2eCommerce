@@ -6,6 +6,7 @@ use yii\bootstrap4\Nav;
 $items = [];
 
 $items[] = ['label' => 'About', 'url' => ['/site/about']];
+$items[] = ['label' => 'Cart', 'url' => ['/cart/index']];
 if (Yii::$app->user->isGuest) {
     $items[] = ['label' => 'Login', 'url' => ['/site/login']];
     $items[] = ['label' => 'Signup', 'url' => ['/site/signup']];

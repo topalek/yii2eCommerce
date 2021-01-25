@@ -201,7 +201,7 @@ $this->title = 'Male Fashion';
                     'dataProvider' => $dataProvider,
                     'layout'       => '{summary}<div class="row">{items}</div>{pager}',
                     'itemView'     => '_product_item',
-                    'itemOptions'  => ['class' => 'col-lg-4 col-md-6 col-sm-6'],
+                    'itemOptions'  => ['class' => 'col-lg-4 col-md-6 col-sm-6 product-item'],
                     'pager'        => [
                         'class'                => yii\widgets\LinkPager::class,
                         'options'              => [

@@ -25,7 +25,10 @@ use yii\helpers\Html;
         <?= Html::a(
             '+ Add To Cart',
             ['/cart/add', 'id' => $model->id],
-            ['data-method' => 'post', 'class' => 'add-cart']
+            [
+//                    'data-method' => 'post',
+                'class' => 'add-to-cart',
+            ]
         ) ?>
         <!--            <a href="#" class="add-cart"></a>-->
         <div class="rating">

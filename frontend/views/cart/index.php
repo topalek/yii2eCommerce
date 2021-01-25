@@ -43,10 +43,19 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="cart-item"><?= Html::a(
                             '<i class="fa fa-trash-o"></i>',
                             ['cart/delete', 'id' => $item['id']],
-                            ['class' => 'btn btn-outline-danger btn-sm']
+                            [
+                                'class'        => 'btn btn-outline-danger btn-sm',
+                                'data-method'  => 'post',
+                                'data-confirm' => 'Are you sure you want to remove this item from cart?',
+                            ]
                         ) ?></div>
                 <?php
                 endforeach; ?>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <?= Html::a('Checkout', ['/cart/checkout'], ['class' => 'btn btn-primary']) ?>
+                </div>
             </div>
         </div>
     </div>

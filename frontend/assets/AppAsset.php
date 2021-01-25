@@ -19,7 +19,7 @@ class AppAsset extends AssetBundle
         'css/nice-select.css',
         'css/owl.carousel.min.css',
         'css/slicknav.min.css',
-        'scss/style.css',
+        'css/style.css',
     ];
     public $js = [
         'js/jquery.nice-select.min.js',

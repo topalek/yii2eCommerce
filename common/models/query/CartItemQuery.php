@@ -18,7 +18,7 @@ class CartItemQuery extends \yii\db\ActiveQuery
      * {@inheritdoc}
      * @return \common\models\CartItem[]|array
      */
-    public function all($db = null)
+    public function all($db = null): CartItemQuery
     {
         return parent::all($db);
     }
@@ -27,13 +27,28 @@ class CartItemQuery extends \yii\db\ActiveQuery
      * {@inheritdoc}
      * @return \common\models\CartItem|array|null
      */
-    public function one($db = null)
+    public function one($db = null): CartItemQuery
     {
         return parent::one($db);
     }
 
-    public function byUser($userId)
+    /**
+     * @param $userId
+     *
+     * @return CartItemQuery
+     */
+    public function byUser($userId): CartItemQuery
     {
         return $this->andWhere(['created_by' => $userId]);
+    }
+
+    /**
+     * @param $id
+     *
+     * @return CartItemQuery
+     */
+    public function productId($id): CartItemQuery
+    {
+        return $this->andWhere(['product_id' => $id]);
     }
 }

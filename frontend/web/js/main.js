@@ -213,4 +213,19 @@
         });
     });
 
+    const $addToCart = $('.add-to-cart');
+    $addToCart.click(e => {
+        e.preventDefault();
+        const $this = $(e.target);
+        const id = $this.closest('.product-item').data('key');
+        console.log(id);
+        $.ajax({
+            method: 'POST',
+            url: $this.attr('href'),
+            success: function (resp) {
+                console.log(resp);
+            }
+
+        })
+    })
 })(jQuery);

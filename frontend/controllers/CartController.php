@@ -9,19 +9,54 @@ namespace frontend\controllers;
 
 
 use common\models\CartItem;
+use common\models\Product;
 use Yii;
+use yii\filters\ContentNegotiator;
 use yii\web\Controller;
+use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
 class CartController extends Controller
 {
+    public function behaviors()
+    {
+        return [
+            [
+                'class'   => ContentNegotiator::class,
+                'only'    => ['add'],
+                'formats' => [
+                    'application/json' => Response::FORMAT_JSON,
+                ],
+            ],
+        ];
+    }
+
     public function actionAdd($id)
     {
-        Yii::$app->response->format = Response::FORMAT_JSON;
+//        Yii::$app->response->format = Response::FORMAT_JSON;
         if (Yii::$app->request->isPost) {
-            return ['status' => true, 'msg' => 'Added to cart'];
+            $product = Product::findOne(['id' => $id, 'status' => Product::STATUS_PUBLISHED]);
+            if (!$product) {
+                throw new NotFoundHttpException();
+            }
+
+            if (Yii::$app->user->isGuest) {
+                //todo add to SESSION if user is guest
+
+            } else {
+                $userId = Yii::$app->user->getId();
+                $item = CartItem::find()->byUser($userId)->productId($id)->one();
+                $item = new CartItem();
+                $item->product_id = $id;
+                $item->created_by = $userId;
+                $item->quantity = 1;
+                if ($item->save()) {
+                    return ['success' => true];
+                }
+                return ['success' => false, 'errors' => $item->errors];
+            }
         }
-        return ['status' => false, 'msg' => 'Only POST method is allowed'];
+        return ['success' => false, 'msg' => 'Only POST method is allowed'];
     }
 
     public function actionIndex()
