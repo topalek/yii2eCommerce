@@ -10,13 +10,13 @@ namespace frontend\controllers;
 
 use common\models\CartItem;
 use common\models\Product;
+use frontend\base\BaseController;
 use Yii;
 use yii\filters\ContentNegotiator;
-use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
-class CartController extends Controller
+class CartController extends BaseController
 {
     public function behaviors()
     {
@@ -46,10 +46,14 @@ class CartController extends Controller
             } else {
                 $userId = Yii::$app->user->getId();
                 $item = CartItem::find()->byUser($userId)->productId($id)->one();
-                $item = new CartItem();
-                $item->product_id = $id;
-                $item->created_by = $userId;
-                $item->quantity = 1;
+                if ($item) {
+                    $item->quantity++;
+                } else {
+                    $item = new CartItem();
+                    $item->product_id = $id;
+                    $item->created_by = $userId;
+                    $item->quantity = 1;
+                }
                 if ($item->save()) {
                     return ['success' => true];
                 }

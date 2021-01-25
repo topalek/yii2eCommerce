@@ -9,12 +9,12 @@ namespace frontend\controllers;
 
 
 use common\models\User;
+use frontend\base\BaseController;
 use Yii;
 use yii\filters\AccessControl;
-use yii\web\Controller;
 use yii\web\ForbiddenHttpException;
 
-class ProfileController extends Controller
+class ProfileController extends BaseController
 {
     public $layout = 'user-layout';
 
