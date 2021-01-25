@@ -33,7 +33,6 @@ class CartController extends BaseController
 
     public function actionAdd($id)
     {
-//        Yii::$app->response->format = Response::FORMAT_JSON;
         if (Yii::$app->request->isPost) {
             $product = Product::findOne(['id' => $id, 'status' => Product::STATUS_PUBLISHED]);
             if (!$product) {
@@ -41,8 +40,28 @@ class CartController extends BaseController
             }
 
             if (Yii::$app->user->isGuest) {
-                //todo add to SESSION if user is guest
+                $items = Yii::$app->session->get(CartItem::SESSION_KEY, []);
+                $found = false;
+                foreach ($items as &$item) {
+                    if ($item['id'] === $id) {
+                        $item['quantity']++;
+                        $found = true;
+                    }
+                }
+                if (!$found) {
+                    $item = [
+                        'id'          => $id,
+                        'name'        => $product->name,
+                        'image'       => $product->image,
+                        'price'       => $product->price,
+                        'quantity'    => 1,
+                        'total_price' => $product->price,
+                    ];
+                    $items[] = $item;
+                }
 
+                Yii::$app->session->set(CartItem::SESSION_KEY, $items);
+                return Yii::$app->session;
             } else {
                 $userId = Yii::$app->user->getId();
                 $item = CartItem::find()->byUser($userId)->productId($id)->one();
@@ -65,10 +84,10 @@ class CartController extends BaseController
 
     public function actionIndex()
     {
+        dd(Yii::$app->session);
         if (Yii::$app->user->isGuest) {
-            // get cart items from session
+            $cartItems = Yii::$app->session->get(CartItem::SESSION_KEY, []);
         } else {
-            // get cart items from db
             $cartItems = CartItem::findBySql(
                 "SELECT c.id,c.product_id,p.image,p.name,p.price,c.quantity,c.quantity*p.price as total_price FROM cart_item c LEFT JOIN product p ON p.id=c.product_id WHERE c.created_by=:user_id",
                 [':user_id' => Yii::$app->user->id]
