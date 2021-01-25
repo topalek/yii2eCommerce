@@ -2,11 +2,19 @@
 
 
 use yii\bootstrap4\Nav;
+use yii\web\View;
 
+/** @var View $this */
+$cartCount = $this->params['cartItemCount'];
 $items = [];
 
 $items[] = ['label' => 'About', 'url' => ['/site/about']];
-$items[] = ['label' => 'Cart', 'url' => ['/cart/index']];
+$items[] = [
+    'label'       => 'Cart <span class="badge badge-danger cart-count">' . $cartCount . '</span>',
+    'encode'      => false,
+    'url'         => ['/cart/index'],
+    'linkOptions' => ['class' => 'cart'],
+];
 if (Yii::$app->user->isGuest) {
     $items[] = ['label' => 'Login', 'url' => ['/site/login']];
     $items[] = ['label' => 'Signup', 'url' => ['/site/signup']];
