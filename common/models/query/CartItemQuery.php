@@ -18,7 +18,7 @@ class CartItemQuery extends \yii\db\ActiveQuery
      * {@inheritdoc}
      * @return \common\models\CartItem[]|array
      */
-    public function all($db = null): CartItemQuery
+    public function all($db = null): array
     {
         return parent::all($db);
     }
@@ -27,7 +27,7 @@ class CartItemQuery extends \yii\db\ActiveQuery
      * {@inheritdoc}
      * @return \common\models\CartItem|array|null
      */
-    public function one($db = null): CartItemQuery
+    public function one($db = null)
     {
         return parent::one($db);
     }
