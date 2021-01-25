@@ -33,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 foreach ($items as $item) :?>
                     <div class="cart-item"><?= $item['name'] ?></div>
                     <div class="cart-item"><?= Html::img(
-                            Product::getUploadsUrl() . $item['image'],
+                            Product::formatImgUrl($item['image']),
                             ['class' => 'img-fluid']
                         ) ?>
                     </div>
