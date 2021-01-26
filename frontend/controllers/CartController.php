@@ -42,14 +42,13 @@ class CartController extends BaseController
             if (Yii::$app->user->isGuest) {
                 $items = Yii::$app->session->get(CartItem::SESSION_KEY, []);
                 $found = false;
-                foreach ($items as &$item) {
-                    if ($item['id'] === $id) {
-                        $item['quantity']++;
-                        $found = true;
-                    }
+                if (array_key_exists($id, $items)) {
+                    $items[$id]['quantity']++;
+                    $found = true;
                 }
+
                 if (!$found) {
-                    $item = [
+                    $items[$id] = [
                         'id'          => $id,
                         'name'        => $product->name,
                         'image'       => $product->image,
@@ -57,11 +56,10 @@ class CartController extends BaseController
                         'quantity'    => 1,
                         'total_price' => $product->price,
                     ];
-                    $items[] = $item;
                 }
 
                 Yii::$app->session->set(CartItem::SESSION_KEY, $items);
-                return Yii::$app->session;
+                return ['success' => true];
             } else {
                 $userId = Yii::$app->user->getId();
                 $item = CartItem::find()->byUser($userId)->productId($id)->one();
@@ -84,7 +82,6 @@ class CartController extends BaseController
 
     public function actionIndex()
     {
-        dd(Yii::$app->session);
         if (Yii::$app->user->isGuest) {
             $cartItems = Yii::$app->session->get(CartItem::SESSION_KEY, []);
         } else {
