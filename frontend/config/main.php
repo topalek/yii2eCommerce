@@ -23,13 +23,13 @@ return [
             'identityClass'   => 'common\models\User',
             'enableAutoLogin' => true,
             'identityCookie'  => [
-                'name'     => '_identity',
+                'name'     => '_identity-ecommerce',
                 'httpOnly' => true,
                 'domain'   => $params['cookieDomain'],
             ],
         ],
         'session'      => [
-            'name'         => $params['cookieDomain'] . '_session',
+            'name'         => 'ecommerce_session',
             'cookieParams' => [
                 'httpOnly' => true,
                 'domain'   => $params['cookieDomain'],
