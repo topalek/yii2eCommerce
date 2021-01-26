@@ -22,38 +22,44 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="card-header">
                 <h3>Cart items</h3>
             </div>
-            <div class="card-body">
-                <div class="grid col6 row-a">
-                    <div class="cart-title">Product</div>
-                    <div class="cart-title">Image</div>
-                    <div class="cart-title">Price</div>
-                    <div class="cart-title">QTY</div>
-                    <div class="cart-title">Total price</div>
-                    <div class="cart-title">Actions</div>
+            <div class="card-body p-0">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Image</th>
+                        <th>Price</th>
+                        <th>QTY</th>
+                        <th>Total</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
                     <?php
-
                     foreach ($items as $item) :?>
-                        <div class="cart-item"><?= $item['name'] ?></div>
-                        <div class="cart-item"><?= Html::img(
-                                Product::formatImgUrl($item['image']),
-                                ['class' => 'img-fluid']
-                            ) ?>
-                        </div>
-                        <div class="cart-item"><?= $item['price'] ?></div>
-                        <div class="cart-item"><?= $item['quantity'] ?></div>
-                        <div class="cart-item"><?= $item['total_price'] ?></div>
-                        <div class="cart-item"><?= Html::a(
-                                '<i class="fa fa-trash-o"></i>',
-                                ['cart/delete', 'id' => $item['id']],
-                                [
-                                    'class'        => 'btn btn-outline-danger btn-sm',
-                                    'data-method'  => 'post',
-                                    'data-confirm' => 'Are you sure you want to remove this item from cart?',
-                                ]
-                            ) ?></div>
+                        <tr class="cart-item-row">
+                            <td scope="row"><?= $item['name'] ?></td>
+                            <td><?= Html::img(
+                                    Product::formatImgUrl($item['image']),
+                                    ['class' => 'img-fluid']
+                                ) ?></td>
+                            <td><?= $item['price'] ?></td>
+                            <td><?= $item['quantity'] ?></td>
+                            <td><?= $item['total_price'] ?></td>
+                            <td><?= Html::a(
+                                    '<i class="fa fa-trash-o"></i>',
+                                    ['cart/delete', 'id' => $item['id']],
+                                    [
+                                        'class'        => 'btn btn-outline-danger btn-sm delete-from-cart',
+                                        'data-method'  => 'post',
+                                        'data-confirm' => 'Are you sure you want to remove this item from cart?',
+                                    ]
+                                ) ?></td>
+                        </tr>
                     <?php
                     endforeach; ?>
-                </div>
+                    </tbody>
+                </table>
                 <div class="row">
                     <div class="col">
                         <?= Html::a('Checkout', ['/cart/checkout'], ['class' => 'btn btn-primary']) ?>
