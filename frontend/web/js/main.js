@@ -218,7 +218,6 @@
     $addToCart.click(e => {
         e.preventDefault();
         const $this = $(e.target);
-        const id = $this.closest('.product-item').data('key');
         $.ajax({
             method: 'POST',
             url: $this.attr('href'),
