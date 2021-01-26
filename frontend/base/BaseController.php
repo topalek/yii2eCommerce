@@ -16,8 +16,8 @@ class BaseController extends Controller
 {
     public function beforeAction($action)
     {
-        $count = 0;
         if (Yii::$app->user->isGuest) {
+            $count = 0;
             $items = Yii::$app->session->get(CartItem::SESSION_KEY, []);
             foreach ($items as $item) {
                 $count += $item['quantity'];
