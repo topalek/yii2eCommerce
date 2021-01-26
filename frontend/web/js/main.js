@@ -213,6 +213,8 @@
         });
     });
 
+
+    // add items to cart
     const $addToCart = $('.add-to-cart');
     const $cartCount = $('.cart-count');
     $addToCart.click(e => {
@@ -228,5 +230,24 @@
             }
 
         })
-    })
+    });
+    // updating quantity in cart
+    const $itemQty = $('.item-quantity');
+    $itemQty.change(e => {
+        const $this = $(e.target);
+        const id = $this.data('id');
+        const url = $this.data('url');
+        $.ajax({
+            method: 'POST',
+            url: url,
+            data: {id: id, count: $this.val()},
+            success: function (resp) {
+                $cartCount.each((i, cart) => {
+                    $(cart).text(resp);
+                });
+            }
+        })
+
+    });
+
 })(jQuery);

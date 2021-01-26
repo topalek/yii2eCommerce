@@ -9,26 +9,13 @@ namespace frontend\base;
 
 
 use common\models\CartItem;
-use Yii;
 use yii\web\Controller;
 
 class BaseController extends Controller
 {
     public function beforeAction($action)
     {
-        if (Yii::$app->user->isGuest) {
-            $count = 0;
-            $items = Yii::$app->session->get(CartItem::SESSION_KEY, []);
-            foreach ($items as $item) {
-                $count += $item['quantity'];
-            }
-        } else {
-            $count = CartItem::findBySql(
-                "SELECT SUM(quantity) FROM cart_item WHERE created_by = :userId",
-                [':userId' => Yii::$app->user->id]
-            )->scalar();
-        }
-        $this->view->params['cartItemCount'] = $count;
+        $this->view->params['cartItemCount'] = CartItem::getTotalCount();
 
         return parent::beforeAction($action);
     }

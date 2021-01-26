@@ -2,6 +2,8 @@
 
 namespace common\models;
 
+use Yii;
+
 /**
  * This is the model class for table "{{%cart_item}}".
  *
@@ -90,5 +92,22 @@ class CartItem extends \yii\db\ActiveRecord
     public function getProduct()
     {
         return $this->hasOne(Product::class, ['id' => 'product_id']);
+    }
+
+    public static function getTotalCount(): int
+    {
+        if (isGuest()) {
+            $count = 0;
+            $items = Yii::$app->session->get(CartItem::SESSION_KEY, []);
+            foreach ($items as $item) {
+                $count += $item['quantity'];
+            }
+        } else {
+            $count = CartItem::findBySql(
+                "SELECT SUM(quantity) FROM cart_item WHERE created_by = :userId",
+                [':userId' => currUserId()]
+            )->scalar();
+        }
+        return $count;
     }
 }

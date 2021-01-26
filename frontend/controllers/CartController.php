@@ -24,7 +24,7 @@ class CartController extends BaseController
         return [
             [
                 'class'   => ContentNegotiator::class,
-                'only'    => ['add'],
+                'only'    => ['add', 'update-count'],
                 'formats' => [
                     'application/json' => Response::FORMAT_JSON,
                 ],
@@ -32,7 +32,8 @@ class CartController extends BaseController
             [
                 'class'   => VerbFilter::class,
                 'actions' => [
-                    'delete' => ['post', 'delete'],
+                    'delete'       => ['post', 'delete'],
+                    'update-count' => ['post'],
                 ],
             ],
         ];
@@ -93,8 +94,8 @@ class CartController extends BaseController
             $cartItems = Yii::$app->session->get(CartItem::SESSION_KEY, []);
         } else {
             $cartItems = CartItem::findBySql(
-                "SELECT c.id,c.product_id,p.image,p.name,p.price,c.quantity,c.quantity*p.price as total_price FROM cart_item c LEFT JOIN product p ON p.id=c.product_id WHERE c.created_by=:user_id",
-                [':user_id' => Yii::$app->user->id]
+                "SELECT  c.product_id as id,p.image,p.name,p.price,c.quantity,c.quantity*p.price as total_price FROM cart_item c LEFT JOIN product p ON p.id=c.product_id WHERE c.created_by=:user_id",
+                [':user_id' => currUserId()]
             )->asArray()->all();
         }
         return $this->render('index', ['items' => $cartItems]);
@@ -112,5 +113,26 @@ class CartController extends BaseController
             CartItem::deleteAll(['product_id' => $id, 'created_by' => currUserId()]);
         }
         return $this->redirect(['index']);
+    }
+
+    public function actionUpdateCount()
+    {
+        $post = Yii::$app->request->post();
+        $itemId = $post['id'];
+        $count = $post['count'];
+        $product = Product::find()->where(['product_id' => $itemId, 'status' => Product::STATUS_PUBLISHED]);
+        if (!$product) {
+            throw new NotFoundHttpException('Product id=' . $itemId . ' not found');
+        }
+        if (isGuest()) {
+            $items = Yii::$app->session->get(CartItem::SESSION_KEY, []);
+            if (array_key_exists($itemId, $items)) {
+                $items[$itemId]['quantity'] = $count;
+            }
+            Yii::$app->session->set(CartItem::SESSION_KEY, $items);
+        } else {
+            CartItem::updateAll(['quantity' => $count], ['product_id' => $itemId, 'created_by' => currUserId()]);
+        }
+        return CartItem::getTotalCount();
     }
 }

@@ -9,6 +9,7 @@
 
 use common\models\Product;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\web\View;
 
 /**@var $items array */
@@ -39,12 +40,22 @@ $this->params['breadcrumbs'][] = $this->title;
                     foreach ($items as $item) :?>
                         <tr class="cart-item-row">
                             <td scope="row"><?= $item['name'] ?></td>
-                            <td><?= Html::img(
-                                    Product::formatImgUrl($item['image']),
-                                    ['class' => 'img-fluid']
-                                ) ?></td>
+                            <td><?= Product::imgPreview($item['image']) ?></td>
                             <td><?= $item['price'] ?></td>
-                            <td><?= $item['quantity'] ?></td>
+                            <td>
+                                <?= Html::input(
+                                    'number',
+                                    'qty',
+                                    $item['quantity'],
+                                    [
+                                        'class'    => 'form-control item-quantity',
+                                        'style'    => 'width:80px',
+                                        'min'      => 1,
+                                        'data-url' => Url::to(['cart/update-count']),
+                                        'data-id'  => $item['id'],
+                                    ]
+                                ) ?>
+                            </td>
                             <td><?= $item['total_price'] ?></td>
                             <td><?= Html::a(
                                     '<i class="fa fa-trash-o"></i>',
