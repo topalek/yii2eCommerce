@@ -220,6 +220,17 @@ class Product extends \yii\db\ActiveRecord
     }
 
     /**
+     * @param       $src
+     * @param array $options
+     *
+     * @return string
+     */
+    public static function imgPreview($src, $options = []): string
+    {
+        return Html::img(self::formatImgUrl($src), array_merge($options, ['style' => 'width:100px']));
+    }
+
+    /**
      * @return string[]
      */
     public static function getStatusList()
