@@ -15,7 +15,7 @@ namespace common\models;
  */
 class CartItem extends \yii\db\ActiveRecord
 {
-    const SESSION_KEY = 'CART_ITEMS';
+    const SESSION_KEY = 'cart_items';
 
     /**
      * {@inheritdoc}
