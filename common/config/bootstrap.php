@@ -1,5 +1,7 @@
 <?php
 
+use common\models\User;
+
 Yii::setAlias('@common', dirname(__DIR__));
 Yii::setAlias('@frontend', dirname(dirname(__DIR__)) . '/frontend');
 Yii::setAlias('@backend', dirname(dirname(__DIR__)) . '/backend');
@@ -30,4 +32,22 @@ function dump($data, $num = 10, $highlight = true)
 function getImgSize($src)
 {
     return @getimagesize($src);
+}
+
+/**
+ * @return bool
+ */
+function isGuest(): bool
+{
+    return Yii::$app->user->isGuest;
+}
+
+function currUser(): ?User
+{
+    return Yii::$app->user->identity;
+}
+
+function currUserId(): ?int
+{
+    return Yii::$app->user->getId();
 }
