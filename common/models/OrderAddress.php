@@ -34,6 +34,22 @@ class OrderAddress extends \yii\db\ActiveRecord
     }
 
     /**
+     * @param $UserAddress
+     *
+     * @return OrderAddress
+     */
+    public static function createFromAddress($UserAddress): OrderAddress
+    {
+        $oAddress = new self();
+        $oAddress->address = $UserAddress->address;
+        $oAddress->city = $UserAddress->city;
+        $oAddress->state = $UserAddress->state;
+        $oAddress->country = $UserAddress->country;
+        $oAddress->zipcode = $UserAddress->zipcode;
+        return $oAddress;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function rules()

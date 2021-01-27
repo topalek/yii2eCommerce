@@ -14,6 +14,7 @@ use yii\web\View;
 
 /**@var $items array */
 $this->title = 'Cart';
+//$this->params['breadcrumbs'][] = $this->title;
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="cart-index">

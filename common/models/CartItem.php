@@ -94,7 +94,7 @@ class CartItem extends \yii\db\ActiveRecord
         return $this->hasOne(Product::class, ['id' => 'product_id']);
     }
 
-    public static function getTotalCount(): int
+    public static function getTotalCount()
     {
         if (isGuest()) {
             $count = 0;
@@ -109,5 +109,36 @@ class CartItem extends \yii\db\ActiveRecord
             )->scalar();
         }
         return $count;
+    }
+
+
+    public static function getTotalPrice()
+    {
+        if (isGuest()) {
+            $count = 0;
+            $items = Yii::$app->session->get(CartItem::SESSION_KEY, []);
+            foreach ($items as $item) {
+                $count += $item['quantity'] * $item['price'];
+            }
+        } else {
+            $count = CartItem::findBySql(
+                "SELECT SUM(c.quantity*p.price) FROM cart_item c LEFT JOIN product p on p.id = c.product_id WHERE c.created_by = :userId",
+                [':userId' => currUserId()]
+            )->scalar();
+        }
+        return $count;
+    }
+
+    public static function getItems(): array
+    {
+        if (Yii::$app->user->isGuest) {
+            $cartItems = Yii::$app->session->get(CartItem::SESSION_KEY, []);
+        } else {
+            $cartItems = CartItem::findBySql(
+                "SELECT  c.product_id as id,p.image,p.name,p.price,c.quantity,c.quantity*p.price as total_price FROM cart_item c LEFT JOIN product p ON p.id=c.product_id WHERE c.created_by=:user_id",
+                [':user_id' => currUserId()]
+            )->asArray()->all();
+        }
+        return $cartItems;
     }
 }

@@ -21,6 +21,10 @@ namespace common\models;
  */
 class Order extends \yii\db\ActiveRecord
 {
+    const STATUS_DRAFT = 0;
+    const STATUS_ACTIVE = 1;
+    const STATUS_DONE = 2;
+
     /**
      * {@inheritdoc}
      */
@@ -67,8 +71,8 @@ class Order extends \yii\db\ActiveRecord
             'id'             => 'ID',
             'total_price'    => 'Total Price',
             'status'         => 'Status',
-            'firstname'      => 'Firstname',
-            'lastname'       => 'Lastname',
+            'firstname'      => 'First Name',
+            'lastname'       => 'Last Name',
             'email'          => 'Email',
             'transaction_id' => 'Transaction ID',
             'created_at'     => 'Created At',

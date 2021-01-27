@@ -9,6 +9,8 @@ namespace frontend\controllers;
 
 
 use common\models\CartItem;
+use common\models\Order;
+use common\models\OrderAddress;
 use common\models\Product;
 use frontend\base\BaseController;
 use Yii;
@@ -90,14 +92,7 @@ class CartController extends BaseController
 
     public function actionIndex()
     {
-        if (Yii::$app->user->isGuest) {
-            $cartItems = Yii::$app->session->get(CartItem::SESSION_KEY, []);
-        } else {
-            $cartItems = CartItem::findBySql(
-                "SELECT  c.product_id as id,p.image,p.name,p.price,c.quantity,c.quantity*p.price as total_price FROM cart_item c LEFT JOIN product p ON p.id=c.product_id WHERE c.created_by=:user_id",
-                [':user_id' => currUserId()]
-            )->asArray()->all();
-        }
+        $cartItems = CartItem::getItems();
         return $this->render('index', ['items' => $cartItems]);
     }
 
@@ -134,5 +129,37 @@ class CartController extends BaseController
             CartItem::updateAll(['quantity' => $count], ['product_id' => $itemId, 'created_by' => currUserId()]);
         }
         return CartItem::getTotalCount();
+    }
+
+    public function actionCheckout()
+    {
+        $order = new Order();
+        $order->status = Order::STATUS_DRAFT;
+        $orderAddress = new OrderAddress();
+        $cartItems = CartItem::getItems();
+        if (!isGuest()) {
+            $user = currUser();
+            $userAddress = $user->address;
+            $order->firstname = $user->firstname;
+            $order->lastname = $user->lastname;
+            $order->email = $user->email;
+
+            $orderAddress->address = $userAddress->address;
+            $orderAddress->city = $userAddress->city;
+            $orderAddress->state = $userAddress->state;
+            $orderAddress->country = $userAddress->country;
+            $orderAddress->zipcode = $userAddress->zipcode;
+        }
+        $post = Yii::$app->request->post();
+        if ($order->load($post) && $orderAddress->load($post)) {
+        }
+        return $this->render(
+            'checkout',
+            [
+                'order'        => $order,
+                'orderAddress' => $orderAddress,
+                'cartItems'    => $cartItems,
+            ]
+        );
     }
 }

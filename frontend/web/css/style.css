@@ -2337,9 +2337,7 @@ ol {
   color: #111111;
   font-weight: 700;
   text-transform: uppercase;
-  border-bottom: 1px solid #d7d7d7;
   padding-bottom: 25px;
-  margin-bottom: 30px;
 }
 .checkout__order p {
   color: #444444;
@@ -2352,13 +2350,13 @@ ol {
 }
 
 .checkout__order__products {
-  font-size: 16px;
-  color: #111111;
-  overflow: hidden;
-  margin-bottom: 18px;
-}
-.checkout__order__products span {
-  float: right;
+    font-size: 16px;
+    color: #111111;
+    overflow: hidden;
+    margin-bottom: 18px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 .checkout__total__products {
