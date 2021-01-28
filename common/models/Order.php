@@ -2,6 +2,8 @@
 
 namespace common\models;
 
+use yii\db\Exception;
+
 /**
  * This is the model class for table "{{%order}}".
  *
@@ -22,8 +24,8 @@ namespace common\models;
 class Order extends \yii\db\ActiveRecord
 {
     const STATUS_DRAFT = 0;
-    const STATUS_ACTIVE = 1;
-    const STATUS_DONE = 2;
+    const STATUS_COMPLETED = 1;
+    const STATUS_FAILED = 2;
 
     /**
      * {@inheritdoc}
@@ -40,6 +42,23 @@ class Order extends \yii\db\ActiveRecord
     public static function find()
     {
         return new \common\models\query\OrderQuery(get_called_class());
+    }
+
+    public function createItems()
+    {
+        $cartItems = CartItem::getItems();
+        foreach ($cartItems as $cartItem) {
+            $orderItem = new OrderItem();
+            $orderItem->product_name = $cartItem['name'];
+            $orderItem->product_id = $cartItem['id'];
+            $orderItem->unit_price = $cartItem['price'];
+            $orderItem->order_id = $this->id;
+            $orderItem->quantity = $cartItem['quantity'];
+            if (!$orderItem->save()) {
+                throw new Exception('Order item was not saved: ' . implode('<br>', $orderItem->errors));
+            }
+        }
+        return true;
     }
 
     /**
@@ -108,5 +127,15 @@ class Order extends \yii\db\ActiveRecord
     public function getOrderItems()
     {
         return $this->hasMany(OrderItem::class, ['order_id' => 'id']);
+    }
+
+    public function saveAddress($post)
+    {
+        $orderAddress = new OrderAddress();
+        $orderAddress->order_id = $this->id;
+        if ($orderAddress->load($post) && $orderAddress->save()) {
+            return true;
+        }
+        return false;
     }
 }

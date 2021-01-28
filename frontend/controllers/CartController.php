@@ -26,7 +26,7 @@ class CartController extends BaseController
         return [
             [
                 'class'   => ContentNegotiator::class,
-                'only'    => ['add', 'update-count'],
+                'only'    => ['add', 'update-count', 'create-order'],
                 'formats' => [
                     'application/json' => Response::FORMAT_JSON,
                 ],
@@ -36,6 +36,7 @@ class CartController extends BaseController
                 'actions' => [
                     'delete'       => ['post', 'delete'],
                     'update-count' => ['post'],
+                    'create-order' => ['post'],
                 ],
             ],
         ];
@@ -137,6 +138,12 @@ class CartController extends BaseController
         $order->status = Order::STATUS_DRAFT;
         $orderAddress = new OrderAddress();
         $cartItems = CartItem::getItems();
+        if (empty($cartItems)) {
+            return $this->goHome();
+        }
+        $orderAddress->attributes = currUser()->address->attributes;
+        $orderAddress->validate();
+        dd($orderAddress->errors);
         if (!isGuest()) {
             $user = currUser();
             $userAddress = $user->address;
@@ -161,5 +168,27 @@ class CartController extends BaseController
                 'cartItems'    => $cartItems,
             ]
         );
+    }
+
+    public function actionCreateOrder()
+    {
+        $post = Yii::$app->request->post();
+        $order = new Order();
+        $order->total_price = CartItem::getTotalPrice();
+        $order->created_at = time();
+        $order->created_by = currUserId();
+        $transaction = Yii::$app->db->beginTransaction();
+        if ($order->load($post)
+            && $order->save()
+            && $order->saveAddress($post)
+            && $order->createItems()) {
+            $transaction->commit();
+            //todo send admin email
+            CartItem::clearCart();
+            return ['success' => true];
+        } else {
+            $transaction->rollBack();
+            return ['success' => false, 'errors' => $order->errors];
+        }
     }
 }

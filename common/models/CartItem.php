@@ -141,4 +141,13 @@ class CartItem extends \yii\db\ActiveRecord
         }
         return $cartItems;
     }
+
+    public static function clearCart()
+    {
+        if (isGuest()) {
+            Yii::$app->session->set(CartItem::SESSION_KEY, []);
+        } else {
+            CartItem::deleteAll(['created_by' => currUserId()]);
+        }
+    }
 }

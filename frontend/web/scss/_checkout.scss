@@ -116,6 +116,8 @@
 .checkout__order {
   background: #f3f2ee;
   padding: 30px;
+  position: sticky;
+  top: 0;
 
   .order__title {
     color: $heading-color;

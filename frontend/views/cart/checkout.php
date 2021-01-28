@@ -4,6 +4,7 @@ use common\models\CartItem;
 use common\models\Order;
 use common\models\OrderAddress;
 use yii\bootstrap4\ActiveForm;
+use yii\helpers\BaseArrayHelper;
 use yii\helpers\Url;
 
 /**
@@ -17,6 +18,16 @@ use yii\helpers\Url;
 /* @var $orderAddress OrderAddress */
 /* @var $cartItems array */
 
+$itemsForPayPal = [];
+foreach ($cartItems as $cartItem) {
+    $itemsForPayPal[] = [
+        'name'        => $cartItem['name'],
+        'unit_amount' => $cartItem['price'],
+        'quantity'    => $cartItem['quantity'],
+        'description' => BaseArrayHelper::getValue($cartItem, 'description', ''),
+    ];
+}
+
 $this->title = 'Checkout';
 $this->params['breadcrumbs'][] = [
     'label' => 'Cart',//Yii::t('shop', 'Cart'),
@@ -24,6 +35,8 @@ $this->params['breadcrumbs'][] = [
 ];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<script src="https://www.paypal.com/sdk/js?client-id=Ad4M2Gj2RC-LRYM638N5CdEIB9hU70-6dVXY-cQR3Z9NS8TbdgGzKyLdTtJCnLbJXpcMVvLZqvsz78Qg">
+</script>
 
 <!-- Checkout Section Begin -->
 <section class="checkout spad">
@@ -39,14 +52,19 @@ $this->params['breadcrumbs'][] = $this->title;
                 <h6 class="checkout__title">Billing Details</h6>
 
                 <div class="row">
-                    <div class="col-lg-6">
+                    <div class="col-lg-4">
                         <div class="checkout__input">
                             <?= $form->field($order, 'firstname')->textInput() ?>
                         </div>
                     </div>
-                    <div class="col-lg-6">
+                    <div class="col-lg-4">
                         <div class="checkout__input">
                             <?= $form->field($order, 'lastname')->textInput() ?>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="checkout__input">
+                            <?= $form->field($order, 'email')->input('email') ?>
                         </div>
                     </div>
                 </div>
@@ -64,45 +82,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
                 <div class="checkout__input">
                     <?= $form->field($orderAddress, 'zipcode')->textInput() ?>
-                </div>
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="checkout__input">
-                            <p>Phone<span>*</span></p>
-                            <input type="text">
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="checkout__input">
-                            <p>Email<span>*</span></p>
-                            <input type="text">
-                        </div>
-                    </div>
-                </div>
-                <div class="checkout__input__checkbox">
-                    <label for="acc">
-                        Create an account?
-                        <input type="checkbox" id="acc">
-                        <span class="checkmark"></span>
-                    </label>
-                    <p>Create an account by entering the information below. If you are a returning customer
-                        please login at the top of the page</p>
-                </div>
-                <div class="checkout__input">
-                    <p>Account Password<span>*</span></p>
-                    <input type="text">
-                </div>
-                <div class="checkout__input__checkbox">
-                    <label for="diff-acc">
-                        Note about your order, e.g, special noe for delivery
-                        <input type="checkbox" id="diff-acc">
-                        <span class="checkmark"></span>
-                    </label>
-                </div>
-                <div class="checkout__input">
-                    <p>Order notes<span>*</span></p>
-                    <input type="text"
-                           placeholder="Notes about your order, e.g. special notes for delivery.">
                 </div>
             </div>
             <div class="col-lg-5 col-md-6">
@@ -151,23 +130,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             <span class="checkmark"></span>
                         </label>
                     </div>
-                    <p>Lorem ipsum dolor sit amet, consectetur adip elit, sed do eiusmod tempor incididunt
-                        ut labore et dolore magna aliqua.</p>
-                    <div class="checkout__input__checkbox">
-                        <label for="payment">
-                            Check Payment
-                            <input type="checkbox" id="payment">
-                            <span class="checkmark"></span>
-                        </label>
-                    </div>
-                    <div class="checkout__input__checkbox">
-                        <label for="paypal">
-                            Paypal
-                            <input type="checkbox" id="paypal">
-                            <span class="checkmark"></span>
-                        </label>
-                    </div>
-                    <button type="submit" class="site-btn">PLACE ORDER</button>
+
+                    <!--                    <div id="paypal-button-container"></div>-->
+                    <p class="text-right">
+                        <button type="submit" class="btn btn-secondary">Place order</button>
+                    </p>
                 </div>
             </div>
         </div>
@@ -176,3 +143,47 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 </section>
 <!-- Checkout Section End -->
+<script>
+
+    paypal.Buttons({
+        createOrder: function (data, actions) {
+            return actions.order.create({
+                purchase_units: [{
+                    amount: {
+                        value: <?= CartItem::getTotalPrice()?>,
+                    },
+                }]
+            })
+        },
+        onApprove: function (data, actions) {
+            // This function captures the funds from the transaction.
+            return actions.order.capture().then(function (details) {
+                const data = $('form').serializeArray();
+                data.push(
+                    {name: "Order[transaction_id]", value: details.id},
+                    {name: "Order[status]", value: details.status == "COMPLETED" ? 1 : 2}
+                );
+                $.ajax({
+                    method: 'post',
+                    url: '<?= Url::to(["/cart/create-order"])?>',
+                    data: data,
+                    success: function (resp) {
+                        console.log(resp)
+                        // This function shows a transaction success message to your buyer.
+                        alert('Thanks for your order ' + details.payer.name.given_name);
+                        window.location.href = '';
+                    }
+                })
+
+            });
+        }
+    }).render('#paypal-button-container');
+</script>
+
+<?php
+$this->registerJs(
+    <<<JS
+
+JS
+) ?>
+

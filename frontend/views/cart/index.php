@@ -17,7 +17,7 @@ $this->title = 'Cart';
 //$this->params['breadcrumbs'][] = $this->title;
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="cart-index">
+<div class="cart-index pt-3 mb-3">
     <?php
     if (!empty($items)): ?>
         <div class="card">
@@ -72,12 +72,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     endforeach; ?>
                     </tbody>
                 </table>
-                <div class="row">
-                    <div class="col">
-                        <?= Html::a('Checkout', ['/cart/checkout'], ['class' => 'btn btn-primary']) ?>
-                    </div>
-                </div>
 
+                <div class="col">
+                    <p class="text-right mt-3">
+                        <?= Html::a('Checkout', ['/cart/checkout'], ['class' => 'btn btn-primary']) ?>
+                    </p>
+                </div>
             </div>
         </div>
     <?php
