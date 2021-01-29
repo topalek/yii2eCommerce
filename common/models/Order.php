@@ -24,8 +24,9 @@ use yii\db\Exception;
 class Order extends \yii\db\ActiveRecord
 {
     const STATUS_DRAFT = 0;
-    const STATUS_COMPLETED = 1;
+    const STATUS_PAID = 1;
     const STATUS_FAILED = 2;
+    const STATUS_COMPLETED = 3;
 
     /**
      * {@inheritdoc}

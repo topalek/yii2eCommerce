@@ -29,7 +29,7 @@ class ProfileController extends BaseController
                     //                        'allow'   => true,
                     //                    ],
                     [
-                        'actions' => ['index', 'address', 'update-address'],
+                        'actions' => ['index', 'address', 'orders', 'update-address'],
                         'allow'   => true,
                         'roles'   => ['@'],
                     ],
@@ -59,6 +59,14 @@ class ProfileController extends BaseController
         $user = Yii::$app->user->getIdentity();
         $address = $user->address;
         return $this->render('address', ['address' => $address]);
+    }
+
+    public function actionOrders()
+    {
+        /** @var User $user */
+        $user = currUser();
+        $orders = $user->orders;
+        return $this->render('orders', ['orders' => $orders]);
     }
 
     /**

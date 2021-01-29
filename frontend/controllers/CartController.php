@@ -138,28 +138,35 @@ class CartController extends BaseController
         $order->status = Order::STATUS_DRAFT;
         $orderAddress = new OrderAddress();
         $cartItems = CartItem::getItems();
+        $order->total_price = CartItem::getTotalPrice();
+
         if (empty($cartItems)) {
             return $this->goHome();
         }
-        $orderAddress->attributes = currUser()->address->attributes;
-        $orderAddress->validate();
-        dd($orderAddress->errors);
+
         if (!isGuest()) {
             $user = currUser();
-            $userAddress = $user->address;
+            $orderAddress->attributes = $user->address->attributes;
             $order->firstname = $user->firstname;
             $order->lastname = $user->lastname;
             $order->email = $user->email;
+        }
+        if (Yii::$app->request->isPost) {
+            $post = Yii::$app->request->post();
+            $transaction = Yii::$app->db->beginTransaction();
+            if ($order->load($post)
+                && $order->save()
+                && $order->saveAddress($post)
+                && $order->createItems()) {
+                $transaction->commit();
+                //todo send admin email
+                CartItem::clearCart();
+                return $this->redirect('/cart/create-order');
+            } else {
+                $transaction->rollBack();
+            }
+        }
 
-            $orderAddress->address = $userAddress->address;
-            $orderAddress->city = $userAddress->city;
-            $orderAddress->state = $userAddress->state;
-            $orderAddress->country = $userAddress->country;
-            $orderAddress->zipcode = $userAddress->zipcode;
-        }
-        $post = Yii::$app->request->post();
-        if ($order->load($post) && $orderAddress->load($post)) {
-        }
         return $this->render(
             'checkout',
             [
@@ -172,6 +179,7 @@ class CartController extends BaseController
 
     public function actionCreateOrder()
     {
+        return 'Create order';
         $post = Yii::$app->request->post();
         $order = new Order();
         $order->total_price = CartItem::getTotalPrice();
