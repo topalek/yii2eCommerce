@@ -1,7 +1,5 @@
 <?php
 
-use common\models\User;
-
 Yii::setAlias('@common', dirname(__DIR__));
 Yii::setAlias('@frontend', dirname(dirname(__DIR__)) . '/frontend');
 Yii::setAlias('@backend', dirname(dirname(__DIR__)) . '/backend');
@@ -42,7 +40,7 @@ function isGuest(): bool
     return Yii::$app->user->isGuest;
 }
 
-function currUser(): ?User
+function currUser(): \yii\web\IdentityInterface
 {
     return Yii::$app->user->identity;
 }
@@ -50,4 +48,50 @@ function currUser(): ?User
 function currUserId(): ?int
 {
     return Yii::$app->user->getId();
+}
+
+/**
+ * @return string
+ */
+function uploadsDirName()
+{
+    return 'storage';
+}
+
+/**
+ * @return bool|string
+ */
+function getBaseUploadsUrl()
+{
+    return '/' . uploadsDirName() . '/';
+}
+
+
+/**
+ * @param      $imageUrl
+ * @param      $width  int|string 'auto'
+ * @param      $height null|int|string 'auto'
+ * @param bool $crop
+ *
+ * @return string
+ */
+function dynamicImageUrl($imageUrl, $width, $height = null, $crop = false): string
+{
+    if ($height == null) {
+        $height = $width;
+    }
+    $imageUrlParts = explode('/', $imageUrl);
+    $data = 's' . $width . '_' . $height;
+    //    if(Params::useRemoteUploads()){
+    //        $data .= '__r';
+    //    }
+    if ($crop) {
+        $data .= '__c';
+    }
+    $last = array_pop($imageUrlParts);
+    $imageUrlParts[] = 'thumbs';
+    $imageUrlParts[] = $data;
+    $imageUrlParts[] = $last;
+    $imageUrl = implode('/', $imageUrlParts);
+    return $imageUrl;
 }
