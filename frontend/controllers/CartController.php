@@ -142,8 +142,7 @@ class CartController extends BaseController
             return $this->goHome();
         }
         $orderAddress->attributes = currUser()->address->attributes;
-        $orderAddress->validate();
-        dd($orderAddress->errors);
+
         if (!isGuest()) {
             $user = currUser();
             $userAddress = $user->address;
