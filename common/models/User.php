@@ -25,6 +25,7 @@ use yii\web\IdentityInterface;
  * @property integer       $updated_at
  * @property string        $password write-only password
  *
+ * @property Order[]       $orders
  * @property UserAddress[] $addresses
  * @property UserAddress   $address
  */
@@ -243,6 +244,16 @@ class User extends ActiveRecord implements IdentityInterface
     public function getAddresses()
     {
         return $this->hasMany(UserAddress::class, ['user_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[UserAddress]].
+     *
+     * @return \yii\db\ActiveQuery|\common\models\query\OrderQuery
+     */
+    public function getOrders(): \yii\db\ActiveQuery
+    {
+        return $this->hasMany(Order::class, ['created_by' => 'id']);
     }
 
     /**
