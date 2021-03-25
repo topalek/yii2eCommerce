@@ -5,6 +5,8 @@
  * Time: 23:12
  */
 
+use yii\helpers\Html;
+
 ?>
 <!-- Topbar -->
 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
@@ -173,6 +175,19 @@
                 </a>
                 <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
             </div>
+        </li>
+
+        <li class="nav-item no-arrow mx-1">
+            <?= Html::a(
+                '<i class="fas fa-globe fa-fw"></i>',
+                Yii::$app->params['frontendUrl'],
+                [
+                    'target' => "_blank",
+                    'class'  => "nav-link",
+                    'role'   => "button",
+                    'title'  => "В магазин",
+                ]
+            ) ?>
         </li>
 
         <div class="topbar-divider d-none d-sm-block"></div>
